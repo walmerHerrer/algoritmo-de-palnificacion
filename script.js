@@ -11,6 +11,25 @@ function checkTimeQuantumInput() {
     }
 }
 
+function MostrarMultiCola() {
+    let multiColas = document.querySelector("#multiColas").classList;
+    let timequantum = document.querySelector("#time-quantum").classList;
+    let algoritmo = document.querySelectorAll(".algoritmo-time");
+    if (selectedAlgorithm.value == 'multiple') {
+        multiColas.remove("hide");
+        timequantum.remove("hide");
+        algoritmo.forEach((element) => {
+            element.classList.remove("hide");
+        });
+        document.getElementById("botones").classList.add("hide");
+    } else {
+        multiColas.add("hide");
+        algoritmo.forEach((element) => {
+            element.classList.add("hide");
+        });
+    }
+}
+
 function checkPriorityCell() {
     let prioritycell = document.querySelectorAll(".priority");
     if (selectedAlgorithm.value == "pnp" || selectedAlgorithm.value == "pp") {
@@ -27,6 +46,7 @@ function checkPriorityCell() {
 selectedAlgorithm.onchange = () => {
     checkTimeQuantumInput();
     checkPriorityCell();
+    MostrarMultiCola();
 };
 
 function inputOnChange() { //onchange EventListener for input
@@ -134,6 +154,11 @@ function addremove() { //add remove bt-io time pair add event listener
             newcell4.classList.add("cpu");
             newcell4.classList.add("process-input");
             processTimes[i] += 2;
+            // let newcell5 = row2.insertCell(processTimes[i] + 2);
+            // newcell5.innerHTML = '<select name = "algoritmos" id = "algoritmos" class = "rounded" > <option value = "3" > RR Prioridad - > 3 < /option>  <option value = "2" > SJF Prioridad - > 2 < /option>  <option value = "1" > FCFS Prioridad - > 1 < /option>  </select>';
+            // newcell5.classList.add("algoritmo-time");
+            // newcell5.classList.add("hide");
+            // processTimes[i] += 2;
             updateColspan();
             inputOnChange();
         };
@@ -172,8 +197,15 @@ function addProcess() {
                         <td class="process-btn hide"><button type="button" class="remove-process-btn">-</button></td>
                     `;
     let rowHTML2 = `
-                           <td class="process-time"><input type="number" min="1" step="1" value="1"> </td>
-                      `;
+                        <td class="process-time"><input type="number" min="1" step="1" value="1"> </td>
+                        <td class = "algoritmo-time hide" rowspan = "2" >
+                            <select name = "algoritmos" id = "algoritmos" class = "rounded" >
+                                <option value = "3" > RR Prioridad - > 3 < /option> 
+                                <option value = "2" > SJF Prioridad - > 2 < /option> 
+                                <option value = "1" > FCFS Prioridad - > 1 < /option> 
+                            </select> 
+                        </td>
+                    `;
     let table = document.querySelector(".main-table tbody");
     table.insertRow(table.rows.length).innerHTML = rowHTML1;
     table.insertRow(table.rows.length).innerHTML = rowHTML2;
@@ -373,7 +405,7 @@ function setOutput(input, output) {
     for (let i = 0; i < process; i++) {
         output.turnAroundTime[i] = output.completionTime[i] - input.arrivalTime[i];
         output.waitingTime[i] = output.turnAroundTime[i] - input.totalBurstTime[i];
-        output.responseTime[i]=output.turnAroundTime[i]/input.totalBurstTime[i];
+        output.responseTime[i] = output.turnAroundTime[i] / input.totalBurstTime[i];
     }
     output.schedule = reduceSchedule(output.schedule);
     output.timeLog = reduceTimeLog(output.timeLog);
@@ -423,7 +455,9 @@ function showGanttChart(output, outputDiv) {
     let ganttChart = document.createElement("div");
     ganttChart.id = "gantt-chart";
 
-    google.charts.load("current", { packages: ["timeline"] });
+    google.charts.load("current", {
+        packages: ["timeline"]
+    });
     google.charts.setOnLoadCallback(drawGanttChart);
 
     function drawGanttChart() {
@@ -431,11 +465,27 @@ function showGanttChart(output, outputDiv) {
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
-        dataTable.addColumn({ type: "string", id: "Gantt Chart" });
-        dataTable.addColumn({ type: "string", id: "Process" });
-        dataTable.addColumn({ type: 'string', id: 'style', role: 'style' });
-        dataTable.addColumn({ type: "date", id: "Start" });
-        dataTable.addColumn({ type: "date", id: "End" });
+        dataTable.addColumn({
+            type: "string",
+            id: "Gantt Chart"
+        });
+        dataTable.addColumn({
+            type: "string",
+            id: "Process"
+        });
+        dataTable.addColumn({
+            type: 'string',
+            id: 'style',
+            role: 'style'
+        });
+        dataTable.addColumn({
+            type: "date",
+            id: "Start"
+        });
+        dataTable.addColumn({
+            type: "date",
+            id: "End"
+        });
         dataTable.addRows(ganttChartData);
         let ganttWidth = '100%';
         if (startGantt >= 20) {
@@ -461,31 +511,24 @@ function showTimelineChart(output, outputDiv) {
     let startTimeline = 0;
     let numero = 0;
     output.schedule.forEach((element) => {
-        // if (element[0] >= 0) { //numero
-        //     numero = element[0];
-        // }
+
         if (element[0] >= 0) { //process 
             timelineChartData.push([
                 "P" + element[0],
                 getDate(startTimeline),
                 getDate(startTimeline + element[1])
-            ]); 
+            ]);
         }
-        // else if (element[0] == -2) { //process 
-        //     timelineChartData.push([
-        //         "P" + numero,
-        //         getDate(startTimeline),
-        //         getDate(startTimeline + element[1])
-        //     ]);
-        // }
-        
+
         startTimeline += element[1];
     });
     timelineChartData.sort((a, b) => parseInt(a[0].substring(1, a[0].length)) - parseInt(b[0].substring(1, b[0].length)));
     let timelineChart = document.createElement("div");
     timelineChart.id = "timeline-chart";
 
-    google.charts.load("current", { packages: ["timeline"] });
+    google.charts.load("current", {
+        packages: ["timeline"]
+    });
     google.charts.setOnLoadCallback(drawTimelineChart);
 
     function drawTimelineChart() {
@@ -493,9 +536,18 @@ function showTimelineChart(output, outputDiv) {
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
-        dataTable.addColumn({ type: "string", id: "Process" });
-        dataTable.addColumn({ type: "date", id: "Start" });
-        dataTable.addColumn({ type: "date", id: "End" });
+        dataTable.addColumn({
+            type: "string",
+            id: "Process"
+        });
+        dataTable.addColumn({
+            type: "date",
+            id: "Start"
+        });
+        dataTable.addColumn({
+            type: "date",
+            id: "End"
+        });
         dataTable.addRows(timelineChartData);
 
         let timelineWidth = '100%';
@@ -506,7 +558,7 @@ function showTimelineChart(output, outputDiv) {
             width: timelineWidth,
         };
         chart.draw(dataTable, options);
-        
+
     }
     outputDiv.appendChild(timelineChart);
 }
@@ -533,10 +585,13 @@ function showFinalTable(input, output, outputDiv) {
         let cell = row.insertCell(index);
         cell.innerHTML = element;
     });
-    let F=0,E = 0, Tr = 0, TRn = 0;
+    let F = 0,
+        E = 0,
+        Tr = 0,
+        TRn = 0;
     let tbody = table.createTBody();
     for (let i = 0; i <= process; i++) {
-        
+
         let row = tbody.insertRow(i);
         if (i == process) {
             let cell = row.insertCell(0);
@@ -548,12 +603,12 @@ function showFinalTable(input, output, outputDiv) {
             cell = row.insertCell(3);
             cell.innerHTML = (F / i).toFixed(2);
             cell = row.insertCell(4);
-            cell.innerHTML = (E/i).toFixed(2);
+            cell.innerHTML = (E / i).toFixed(2);
             cell = row.insertCell(5);
-            cell.innerHTML = (Tr/i).toFixed(2);
+            cell.innerHTML = (Tr / i).toFixed(2);
             cell = row.insertCell(6);
-            cell.innerHTML = (TRn/i).toFixed(2);
-            
+            cell.innerHTML = (TRn / i).toFixed(2);
+
         } else {
             let cell = row.insertCell(0);
             cell.innerHTML = "P" + (i + 1);
@@ -562,21 +617,21 @@ function showFinalTable(input, output, outputDiv) {
             cell = row.insertCell(2);
             cell.innerHTML = input.totalBurstTime[i];
             cell = row.insertCell(3);
-            F+=output.completionTime[i];
+            F += output.completionTime[i];
             cell.innerHTML = output.completionTime[i];
             cell = row.insertCell(4);
-            E+=output.waitingTime[i];
+            E += output.waitingTime[i];
             cell.innerHTML = output.waitingTime[i];
             cell = row.insertCell(5);
-            Tr+=output.turnAroundTime[i];
+            Tr += output.turnAroundTime[i];
             cell.innerHTML = output.turnAroundTime[i];
             cell = row.insertCell(6);
             TRn += output.responseTime[i];
             cell.innerHTML = output.responseTime[i].toFixed(2);
         }
-        
+
     }
-    
+
     outputDiv.appendChild(table);
 
 
@@ -1132,8 +1187,12 @@ function calculateOutput() {
     CPUScheduler(mainInput, mainUtility, mainOutput);
     setOutput(mainInput, mainOutput);
     showOutput(mainInput, mainOutput, outputDiv);
+
 }
 
 document.getElementById("calculate").onclick = () => {
     calculateOutput();
+
+
 };
+/** */
