@@ -97,7 +97,7 @@ var informacionDivs = function (semaforo, tiempo) {
         nomCola = "";
         switch (numCola) {
             case numCola = 0:
-                nomCola = "Fifo";
+                nomCola = "FCFS";
                 break;
             case numCola = 1:
                 nomCola = "R.Robbin";
@@ -141,7 +141,7 @@ var informacionDivs = function (semaforo, tiempo) {
         nomCola = "";
         switch (numCola) {
             case numCola = 0:
-                nomCola = "Fifo";
+                nomCola = "FCFS";
                 break;
             case numCola = 1:
                 nomCola = "R.Robbin";

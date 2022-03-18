@@ -2,7 +2,7 @@ class Fifo extends Planificacion {
 
     constructor() {
         super();
-        this.nombre = "fifo";
+        this.nombre = "FCFS";
     }
 
     public agregar(nodo: Nodo): void {
