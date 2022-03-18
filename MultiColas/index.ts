@@ -10,7 +10,7 @@ const main = function () {
     document.getElementById("bloqueado").innerHTML = "";
     document.getElementById("listos").innerHTML = "";
     document.getElementById("tablaProcesos").innerHTML = "";
-    /*let semaforo: Semaforo = new Semaforo();
+    let semaforo: Semaforo = new Semaforo();
     let len: number = semaforo.planificadores.length;
     let total: number = 10;
     let tiempo: number = 0;
@@ -37,40 +37,40 @@ const main = function () {
             clearInterval(time);
         }
     }, 1000);
-    
-    */
-    let semaforo = new Semaforo();
-    let len = semaforo.planificadores.length;
-    let tiempo: number = 0;
-    let process: number = document.querySelector(".main-table").rows.length;
-    process = process - Math.round(process / 2);
-    let i = 1;
-    let time = setInterval(function () {
-        semaforo.transcurrirTiempo();
-        if (process > 0) {
-            let rowCells1 = document.querySelector(".main-table").rows[2 * i - 1].cells;
-            let rowCells2 = document.querySelector(".main-table").rows[2 * i].cells;
-            let nodo: Nodo = new Nodo();
-            nodo.cola = (Math.round(Math.random() * 100) % len);
-            nodo.llegada = rowCells1[2].firstElementChild.value;
-            nodo.nombre = "" + i;
-            nodo.prioridad = rowCells1[1].firstElementChild.value;
-            nodo.rafaga = rowCells2[0].firstElementChild.value;
-            nodo.transcurrido = 0;
-            nodo.siguiente = null;
-            semaforo.agregarNodo(nodo);
-            process--;
-            i++;
-        }
-        semaforo.validarEnvejecimiento();
-        informacionDivs(semaforo, tiempo);
-        informacionTimeLine(semaforo, tiempo);
-        informacionTabla();
-        tiempo++;
-        if (semaforo.procesoActual === null && semaforo.bloqueado === semaforo.bloqueado.siguiente) {
-            clearInterval(time);
-        }
-    }, 0);
+
+
+    // let semaforo = new Semaforo();
+    // let len = semaforo.planificadores.length;
+    // let tiempo: number = 0;
+    // let process: number = document.querySelector(".main-table").rows.length;
+    // process = process - Math.round(process / 2);
+    // let i = 1;
+    // let time = setInterval(function () {
+    //     semaforo.transcurrirTiempo();
+    //     if (process > 0) {
+    //         let rowCells1 = document.querySelector(".main-table").rows[2 * i - 1].cells;
+    //         let rowCells2 = document.querySelector(".main-table").rows[2 * i].cells;
+    //         let nodo: Nodo = new Nodo();
+    //         nodo.cola = (Math.round(Math.random() * 100) % len);
+    //         nodo.llegada = rowCells1[2].firstElementChild.value;
+    //         nodo.nombre = "" + i;
+    //         nodo.prioridad = rowCells1[1].firstElementChild.value;
+    //         nodo.rafaga = rowCells2[0].firstElementChild.value;
+    //         nodo.transcurrido = 0;
+    //         nodo.siguiente = null;
+    //         semaforo.agregarNodo(nodo);
+    //         process--;
+    //         i++;
+    //     }
+    //     semaforo.validarEnvejecimiento();
+    //     informacionDivs(semaforo, tiempo);
+    //     informacionTimeLine(semaforo, tiempo);
+    //     informacionTabla();
+    //     tiempo++;
+    //     if (semaforo.procesoActual === null && semaforo.bloqueado === semaforo.bloqueado.siguiente) {
+    //         clearInterval(time);
+    //     }
+    // }, 0);
 };
 
 const informacionDivs = (semaforo: Semaforo, tiempo: number) => {

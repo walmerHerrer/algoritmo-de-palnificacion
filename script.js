@@ -11,6 +11,19 @@ function checkTimeQuantumInput() {
     }
 }
 
+function checkPriorityCell() {
+    let prioritycell = document.querySelectorAll(".priority");
+    if (selectedAlgorithm.value == "pnp" || selectedAlgorithm.value == "pp") {
+        prioritycell.forEach((element) => {
+            element.classList.remove("hide");
+        });
+    } else {
+        prioritycell.forEach((element) => {
+            element.classList.add("hide");
+        });
+    }
+}
+
 function MostrarMultiCola() {
     let multiColas = document.querySelector("#multiColas").classList;
     let timequantum = document.querySelector("#time-quantum").classList;
@@ -22,22 +35,11 @@ function MostrarMultiCola() {
             element.classList.remove("hide");
         });
         document.getElementById("botones").classList.add("hide");
+        document.getElementById("output").innerHTML = ""
     } else {
+        document.getElementById("botones").classList.remove("hide");
         multiColas.add("hide");
         algoritmo.forEach((element) => {
-            element.classList.add("hide");
-        });
-    }
-}
-
-function checkPriorityCell() {
-    let prioritycell = document.querySelectorAll(".priority");
-    if (selectedAlgorithm.value == "pnp" || selectedAlgorithm.value == "pp") {
-        prioritycell.forEach((element) => {
-            element.classList.remove("hide");
-        });
-    } else {
-        prioritycell.forEach((element) => {
             element.classList.add("hide");
         });
     }
@@ -154,11 +156,6 @@ function addremove() { //add remove bt-io time pair add event listener
             newcell4.classList.add("cpu");
             newcell4.classList.add("process-input");
             processTimes[i] += 2;
-            // let newcell5 = row2.insertCell(processTimes[i] + 2);
-            // newcell5.innerHTML = '<select name = "algoritmos" id = "algoritmos" class = "rounded" > <option value = "3" > RR Prioridad - > 3 < /option>  <option value = "2" > SJF Prioridad - > 2 < /option>  <option value = "1" > FCFS Prioridad - > 1 < /option>  </select>';
-            // newcell5.classList.add("algoritmo-time");
-            // newcell5.classList.add("hide");
-            // processTimes[i] += 2;
             updateColspan();
             inputOnChange();
         };
@@ -197,15 +194,8 @@ function addProcess() {
                         <td class="process-btn hide"><button type="button" class="remove-process-btn">-</button></td>
                     `;
     let rowHTML2 = `
-                        <td class="process-time"><input type="number" min="1" step="1" value="1"> </td>
-                        <td class = "algoritmo-time hide" rowspan = "2" >
-                            <select name = "algoritmos" id = "algoritmos" class = "rounded" >
-                                <option value = "3" > RR Prioridad - > 3 < /option> 
-                                <option value = "2" > SJF Prioridad - > 2 < /option> 
-                                <option value = "1" > FCFS Prioridad - > 1 < /option> 
-                            </select> 
-                        </td>
-                    `;
+                           <td class="process-time"><input type="number" min="1" step="1" value="1"> </td>
+                      `;
     let table = document.querySelector(".main-table tbody");
     table.insertRow(table.rows.length).innerHTML = rowHTML1;
     table.insertRow(table.rows.length).innerHTML = rowHTML2;
@@ -511,7 +501,9 @@ function showTimelineChart(output, outputDiv) {
     let startTimeline = 0;
     let numero = 0;
     output.schedule.forEach((element) => {
-
+        // if (element[0] >= 0) { //numero
+        //     numero = element[0];
+        // }
         if (element[0] >= 0) { //process 
             timelineChartData.push([
                 "P" + element[0],
@@ -519,6 +511,13 @@ function showTimelineChart(output, outputDiv) {
                 getDate(startTimeline + element[1])
             ]);
         }
+        // else if (element[0] == -2) { //process 
+        //     timelineChartData.push([
+        //         "P" + numero,
+        //         getDate(startTimeline),
+        //         getDate(startTimeline + element[1])
+        //     ]);
+        // }
 
         startTimeline += element[1];
     });
@@ -1187,12 +1186,8 @@ function calculateOutput() {
     CPUScheduler(mainInput, mainUtility, mainOutput);
     setOutput(mainInput, mainOutput);
     showOutput(mainInput, mainOutput, outputDiv);
-
 }
 
 document.getElementById("calculate").onclick = () => {
     calculateOutput();
-
-
 };
-/** */
