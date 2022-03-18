@@ -17,25 +17,23 @@ var Semaforo = (function () {
         this.listo.siguiente = this.listo;
     }
     Semaforo.prototype.transcurrirTiempo = function () {
-        
+
         this.tiempo++;
         if (this.procesoActual === null) {
             this.signal();
-        }
-        else {
+        } else {
             this.procesoActual.rafaga--;
             this.procesoActual.transcurrido++;
             if (this.procesoActual.rafaga === 0) {
                 this.signal();
-            }
-            else if (this.planificadores[this.procesoActual.cola].gestionActual(this.procesoActual, this.tiempo)) {
+            } else if (this.planificadores[this.procesoActual.cola].gestionActual(this.procesoActual, this.tiempo)) {
                 this.signal();
             }
-            if (Math.random() >= 0.5
-                && Math.random() >= 0.5
-                && Math.random() >= 0.5
-                && this.procesoActual !== null
-                && this.procesoActual.transcurrido > 0) {
+            if (Math.random() >= 0.5 &&
+                Math.random() >= 0.5 &&
+                Math.random() >= 0.5 &&
+                this.procesoActual !== null &&
+                this.procesoActual.transcurrido > 0) {
                 this.bloquear();
             }
         }
@@ -50,15 +48,12 @@ var Semaforo = (function () {
                 expulsado.transcurrido = 0;
                 // alert("Proceso "+expulsado.nombre+" expulsado por prioridad de colas");
                 this.planificadores[expulsado.cola].agregar(expulsado);
-            }
-            else if (nodo.cola === this.procesoActual.cola) {
+            } else if (nodo.cola === this.procesoActual.cola) {
                 this.procesoActual = this.planificadores[nodo.cola].gestionCompetencia(nodo, this.procesoActual);
-            }
-            else {
+            } else {
                 this.planificadores[nodo.cola].agregar(nodo);
             }
-        }
-        else {
+        } else {
             this.procesoActual = nodo;
         }
     };
@@ -100,12 +95,10 @@ var Semaforo = (function () {
                     this.bloqueado.siguiente = pos.siguiente;
                     pos.llegada = this.tiempo;
                     this.agregarNodo(pos);
-                }
-                else {
+                } else {
                     return;
                 }
-            }
-            else {
+            } else {
                 return;
             }
         }
@@ -131,17 +124,17 @@ var Semaforo = (function () {
             }
         }
     };
-    Semaforo.prototype.validarEnvejecimiento = function () {
-        var len = this.planificadores.length;
-        for (var i = 1; i < len; i++) {
-            if (this.planificadores[i].validarEnvejecimiento(this.tiempo, this.tiempoEnvejecimiento)) {
-                var removido = this.planificadores[i].remover();
-                removido.cola = i - 1;
-                removido.llegada = this.tiempo;
-                // alert("Proceso "+removido.nombre+" removido de "+this.planificadores[i].nombre+" por envejecimiento a "+this.planificadores[i - 1].nombre);
-                this.agregarNodo(removido);
-            }
-        }
-    };
+    // Semaforo.prototype.validarEnvejecimiento = function () {
+    //     var len = this.planificadores.length;
+    //     for (var i = 1; i < len; i++) {
+    //         if (this.planificadores[i].validarEnvejecimiento(this.tiempo, this.tiempoEnvejecimiento)) {
+    //             var removido = this.planificadores[i].remover();
+    //             removido.cola = i - 1;
+    //             removido.llegada = this.tiempo;
+    //             // alert("Proceso "+removido.nombre+" removido de "+this.planificadores[i].nombre+" por envejecimiento a "+this.planificadores[i - 1].nombre);
+    //             this.agregarNodo(removido);
+    //         }
+    //     }
+    // };
     return Semaforo;
 }());

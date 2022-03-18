@@ -28,7 +28,7 @@ const main = function () {
             semaforo.agregarNodo(nodo);
             total--;
         }
-        semaforo.validarEnvejecimiento();
+        //semaforo.validarEnvejecimiento();
         informacionDivs(semaforo, tiempo);
         informacionTimeLine(semaforo, tiempo);
         informacionTabla();

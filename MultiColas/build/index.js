@@ -33,7 +33,7 @@ var main = function () {
             process--;
             i++;
         }
-        semaforo.validarEnvejecimiento();
+        //semaforo.validarEnvejecimiento();
         informacionDivs(semaforo, tiempo);
         informacionTimeLine(semaforo, tiempo);
         informacionTabla();

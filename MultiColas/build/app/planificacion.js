@@ -16,12 +16,12 @@ var Planificacion = (function () {
         this.cabeza.siguiente = removido.siguiente;
         return removido;
     };
-    Planificacion.prototype.validarEnvejecimiento = function (tiempoActua, diferencia) {
-        var pos = this.cabeza.siguiente;
-        if (this.cabeza !== this.cabeza.siguiente) {
-            return (pos.llegada < tiempoActua && tiempoActua - pos.llegada >= diferencia);
-        }
-        return false;
-    };
+    // Planificacion.prototype.validarEnvejecimiento = function (tiempoActua, diferencia) {
+    //     var pos = this.cabeza.siguiente;
+    //     if (this.cabeza !== this.cabeza.siguiente) {
+    //         return (pos.llegada < tiempoActua && tiempoActua - pos.llegada >= diferencia);
+    //     }
+    //     return false;
+    // };
     return Planificacion;
 }());

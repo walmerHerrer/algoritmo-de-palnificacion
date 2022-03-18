@@ -144,7 +144,7 @@ class Semaforo {
         for (let i = 1; i < len; i++) {
             if (this.planificadores[i].validarEnvejecimiento(this.tiempo, this.tiempoEnvejecimiento)) {
                 let removido: Nodo = this.planificadores[i].remover();
-                removido.cola = i - 1;
+                removido.cola = i;
                 removido.llegada = this.tiempo;
                 this.agregarNodo(removido);
             }
